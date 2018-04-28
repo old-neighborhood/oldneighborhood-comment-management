@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>LIST PAGE</h1>
+	
+	<table>
+		<thead>
+			<tr>
+				<th>No.</th>
+				<th>EMP_ID</th>
+				<th>EMP_NAME</th>
+				<th>EMP_AGE</th>
+				<th>EMP_BIRTHDAY</th>
+				<th>EMP_SALARY</th>
+				<th>EMP_CTIME</th>
+				<th>OPERATION</th>
+			</tr>
+		</thead>
+		<tbody th:each="emp , stat: ${emps}">
+			<tr>
+				<td th:text="${stat.count}"></td>
+				<td th:text="${emp.emp_id}"></td>
+				<td th:text="${emp.emp_name}"></td>
+				<td th:text="${emp.emp_age}"></td>
+				<td th:text="${emp.emp_birthday}"></td>
+				<td th:text="${emp.emp_salary}"></td>
+				<td th:text="${emp.emp_ctime}"></td>
+				<td>
+					<!-- 
+						如果需要使用请求地址直接绑定参数  
+							一个 可以直接使用：@{/emp/list/{current_page}(current_page=${pageDto.total_pages})}
+							多个参数 ：|@{/emp/del}/${pageDto.current_page}/${emp.emp_id}|
+					 -->
+					<!-- 
+					<span th:if="${stat.count==1}">
+						<a th:href="|@{/emp/del}/${pageDto.current_page-1}/${emp.emp_id}|">DEL</a>
+					</span>
+					<span th:if="${stat.count != 1}">
+						<a th:href="|@{/emp/del}/${pageDto.current_page}/${emp.emp_id}|">DEL</a>
+					</span>
+					 -->
+					 <!-- 
+					 	超链接 默认发送都是get请求  除非使用事件触发ajax请求
+					 	如何在ajax请求过程中 发送符合restful api 风格的请求
+					 	
+					 	http://localhost/test/emp/1/3/0
+					 	http://localhost/test/emp/1/3
+					  -->
+					<a th:href="|@{/emp}/${pageDto.current_page}/${emp.emp_id}/0|">DEL</a>
+					<a th:href="|@{/emp}/${pageDto.current_page}/${emp.emp_id}|">EDIT</a>
+				</td>
+			</tr>
+		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="8">
+					<span th:text="${pageDto.current_page}"></span>/<span th:text="${pageDto.total_pages}"></span> ，
+					 <span th:text="${pageDto.total_rows}"></span>条记录  
+					 <a th:href="@{/emp/1}">首页</a> 
+					 <span th:if="${pageDto.hasPrev}">
+					 	<a th:href="@{/emp/{current_page}(current_page=${pageDto.current_page-1})}">上一页</a>
+					 </span>
+					 <span th:if="${pageDto.hasNext}">
+					 	<a th:href="@{/emp/{current_page}(current_page=${pageDto.current_page+1})}">下一页</a>
+					 </span>  
+					 <a th:href="@{/emp/{current_page}(current_page=${pageDto.total_pages})}">尾页</a>
+				</td>
+			</tr>
+		</tfoot>
+	</table>
+	
+	<br /><br /><br />
+	
+	<a th:href="@{/}">继续添加记录</a>
+	
+	
+	
+</body>
+</html>
